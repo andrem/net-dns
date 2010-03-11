@@ -12,7 +12,16 @@ module Net # :nodoc:
         private
         
         def build_pack
-          str = ""
+          @srv_pack = [@priority].pack("n") + [@weight].pack("n") + [@port].pack("n") + pack_name(@host)
+          @rdlength = @srv_pack.size
+        end
+        
+        def get_data
+          @srv_pack
+        end
+        
+        def get_inspect
+          "#@priority #@weight #@port #@host"
         end
         
         def subclass_new_from_binary(data,offset)
@@ -29,7 +38,7 @@ module Net # :nodoc:
             @host << str
           end
           @host=@host.join(".")
-          offset
+          return offset
         end
         
         private
